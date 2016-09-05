@@ -1,0 +1,35 @@
+/*
+body {
+	padding-top: 70px;
+	padding-bottom: 30px;
+}
+*/
+
+.theme-dropdown .dropdown-menu {
+	position: static;
+	display: block;
+	margin-bottom: 20px;
+}
+
+.theme-showcase > p > .btn {
+	margin: 5px 0;
+}
+
+.theme-showcase .navbar .container {
+	width: auto;
+}
+
+th.number-cell {
+	text-align: right;
+}
+
+td.number-cell {
+	text-align: right;
+}
+
+img.item-img-small {
+	max-width: 64px;
+	max-height: 64px;
+}
+
+/* vim: set ts=2 noexpandtab syntax=css: */

@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<!--
+ * CCHS Gift Registry - admin page
+ * Copyright (c) 2015,2016 Patrick Lai
+ -->
+<html>
+<head> <!--{{{-->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>CCHS Gift Registry: Admin</title>
+	<link rel="stylesheet" href="css/normalize.css">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="css/style.css">
+</head> <!--}}}-->
+<body>
+	<!-- Javascript resources {{{-->
+	<script src="js/lib/jquery-1.11.2.min.js"></script>
+	<script src="js/lib/bootstrap.min.js"></script>
+	<script src="js/lib/handlebars-v2.0.0.js"></script>
+	<script src="js/lib/ember.prod.js"></script>
+	<script src="js/lib/ember-data.js"></script>
+
+	<script src="js/gift-registry.prod.js"></script>
+	<!--
+	<script src="js/gift-registry.js"></script>
+	-->
+	<!--}}}-->
+
+	<!-- navigation tabs {{{-->
+	<script type="text/x-handlebars">
+		<div class="navbar">
+			<div class="nav">
+				<a href="" class="navbar-brand">
+					CCHS Gift Registry &mdash; Admin
+				</a>
+			</div>
+			<ul class="nav nav-tabs">
+				{{#link-to 'index' tagName="li" href=false}}
+					<a {{bind-attr href="view.href"}}
+						 {{bind-attr class="isRouteIndex:active:"}}>
+						Home
+					</a>
+				{{/link-to}}
+				{{#link-to 'items' tagName="li" href=false}}
+					<a {{bind-attr href="view.href"}}
+						 {{bind-attr class="isRouteItems:active:"}}>
+						Items
+					</a>
+				{{/link-to}}
+				{{#link-to 'donors' tagName="li" href=false}}
+					<a {{bind-attr href="view.href"}}
+						 {{bind-attr class="isRouteDonors:active:"}}>
+						Donors
+					</a>
+				{{/link-to}}
+				{{#link-to 'pledges' tagName="li" href=false}}
+					<a {{bind-attr href="view.href"}}
+						 {{bind-attr class="isRoutePledges:active:"}}>
+						Pledges
+					</a>
+				{{/link-to}}
+				{{#link-to 'depts' tagName="li" href=false}}
+					<a {{bind-attr href="view.href"}}
+						 {{bind-attr class="isRouteDepts:active:"}}>
+						Categories
+					</a>
+				{{/link-to}}
+			</ul>
+		</div>
+		{{outlet}}
+		{{outlet 'modal'}}
+		<div class="panel-footer small">
+			<p>
+				This site is for authorized users only.
+				Information on this site is confidential of the
+				California Crosspoint Middle &amp; High School (CCHS).
+			</p>
+		</div>
+	</script>
+	<!--}}}-->
+
+	<!-- index {{{-->
+	<script type="text/x-handlebars" id="index">
+		<div class="container-fluid">
+			{{#each msg in model}}
+				<div class="row-fluid">
+					<p>{{{msg}}}</p>
+				</div>
+			{{/each}}
+		</div>
+	</script>
+	<!--}}}-->
+
+<!--*********************************************************-->
+
+	<!-- components/modal-dialog {{{-->
+	<script type="text/x-handlebars" id="components/modal-dialog">
+		<div class="modal fade"><div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">{{title}}</h4>
+				</div>
+				<div class="modal-body">
+					{{yield}}
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-default" data-dismiss="modal">
+						{{other}}
+					</button>
+					<button class="btn btn-primary" {{action 'ok'}}>
+						{{main}}
+					</button>
+				</div>
+			</div>
+		</div></div>
+	</script>
+	<!--}}}-->
+
+	<!-- confirmation {{{-->
+	<script type="text/x-handlebars" data-template-name="confirmation">
+		{{#modal-dialog title=title main=main other=other ok=ok close=close}}
+			{{msg}}
+		{{/modal-dialog}}
+	</script>
+	<!--}}}-->
+
+	<!-- pledge-form {{{-->
+	<script type="text/x-handlebars" data-template-name="pledge-form">
+		{{#modal-dialog title=title main=main other=other ok=ok close=close}}
+			<table class='table'>
+				<thead>
+					<tr>
+						<th>Item #{{item.id}}: {{item.name}}</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Amount:
+						${{item.price}} &times; {{input type="text" size="3" value=count}}
+						= ${{amount}}
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		{{/modal-dialog}}
+	</script>
+	<!--}}}-->
+
+	<!-- entity-picker {{{-->
+	<script type="text/x-handlebars" data-template-name="entity-picker">
+		{{#modal-dialog title=title main=main other=other ok=ok close=close}}
+			<button class="btn btn-xs" {{action 'pageFirst'}}>|&lsaquo;</button>
+			<button class="btn btn-xs" {{action 'pagePrev'}}>&laquo;</button>
+			<!--&hellip;-->
+			{{pgno}}
+			<!--&hellip;-->
+			<button class="btn btn-xs" {{action 'pageNext'}}>&raquo;</button>
+			&nbsp;&nbsp;
+			Name:
+			{{input type="text" size="12" value=searchStr insert-newline="search"}}
+			<button class="btn btn-sm" {{action 'search'}}>Search</button>
+
+			<table class='table'>
+				<thead>
+					<tr>
+						<th>
+							Selected:
+								{{#unless picked.id}}(none){{else}}
+									<button class="btn btn-xs" {{action 'unpick'}}>
+										&times;
+									</button>
+									{{picked.name}} [#{{picked.id}}]
+								{{/unless}}
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{#each model.entities}}
+					<tr>
+						<td>
+							<button class="btn btn-xs" {{action 'pick' this}}>
+								&#10003;
+							</button>
+							{{name}}
+						</td>
+					</tr>
+					{{/each}}
+				</tbody>
+			</table>
+		{{/modal-dialog}}
+	</script>
+	<!--}}}-->
+
+<!--*********************************************************-->
+
+	<!-- donors/_control {{{-->
+	<script type="text/x-handlebars" id="donors/_control">
+		<table class="table-condensed">
+			<tbody>
+			<tr>
+				<td colspan="2">
+					<button class="btn btn-xs" {{action 'pageFirst'}}>|&lsaquo;</button>
+					<button class="btn btn-xs" {{action 'pagePrev'}}>&laquo;</button>
+					<!--&hellip;-->
+					{{page}} / {{total}}
+					<!--&hellip;-->
+					<button class="btn btn-xs" {{action 'pageNext'}}>&raquo;</button>
+					<button class="btn btn-xs" {{action 'pageLast'}}>&rsaquo;|</button>
+					&nbsp;&nbsp;
+					<button class="btn btn-xs" {{action 'toggleShowOptions'}}
+						 {{bind-attr aria-pressed=showOptions}}>
+						{{#if showOptions}}&barwed;{{else}}&barvee;{{/if}}
+						Options
+					</button>
+				</td>
+			</tr>
+			{{#if showOptions}}
+			<tr>
+				<td>Name</td>
+				<td>
+					{{input type="text" size="12"
+						value=nameFilter insert-newline="applyNameFilter"}}
+					<button class="btn btn-xs" {{action 'clearNameFilter'}}>
+						&times;
+					</button>
+				</td>
+			</tr>
+			{{/if}}
+			</tbody>
+		</table>
+	</script>
+	<!--}}}-->
+
+	<!-- donors {{{-->
+	<script type="text/x-handlebars" id="donors">
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="col-md-3">
+					{{partial "donors/control"}}
+					<table class='table'>
+						<thead>
+							<tr>
+								<th>CCHS Supporters</th>
+								<th class="col-pull-1">
+									<button class="btn btn-xs" {{action 'addDonor'}}>
+										New
+									</button>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							{{#each dr in model}}
+							<tr>
+								<td>
+								<div class="col-md-10">
+									{{#link-to 'donor' dr}}
+										{{dr.l_name}}, {{dr.f_name}}
+									{{/link-to}}
+								</div>
+								</td>
+								<td class="col-pull-1">
+									<button class="btn btn-xs" {{action 'delDonor' dr}}>
+										&cross;
+									</button>
+								</td>
+							</tr>
+							{{/each}}
+						</tbody>
+					</table>
+				</div>
+				{{outlet}}
+			</div>
+		</div>
+	</script>
+	<!--}}}-->
+
+	<!-- donors/add {{{-->
+	<script type="text/x-handlebars" id="donors/add">
+		<div class="col-md-6">
+		<h3>
+			{{#if name}}
+				{{name}}
+			{{else}}
+				<span class="text-muted">Enter new supporter &hellip;</span>
+			{{/if}}
+			<br/>
+			<small class='muted'>
+				<button class="btn btn-sm btn-primary" {{action 'add' model}}>
+					Add
+				</button>
+			</small>
+		</h3>
+		{{partial 'donor/edit'}}
+		</div>
+	</script><!--}}}-->
+
+	<!-- donor {{{-->
+	<script type="text/x-handlebars" id="donor">
+		<div class="col-md-6">
+		<h3>
+			{{name}}
+			<br/>
+			<small class='muted'>
+				{{#if isEditing}}
+					<button class="btn btn-sm" {{action 'cancelEdit'}}>Cancel</button>
+					{{#if isDirty}}
+					<button class="btn btn-sm btn-primary" {{action 'finishEdit'}}>
+						Save
+					</button>
+					{{/if}}
+				{{else}}
+					<button class="btn btn-sm" {{action 'edit'}}>Edit</button>
+				{{/if}}
+			</small>
+		</h3>
+		<hr>
+		{{#unless isEditing}}
+		{{partial 'donor/view'}}
+		{{else}}
+		{{partial 'donor/edit'}}
+		{{/unless}}
+		</div>
+	</script><!--}}}-->
+
+	<!-- donor/_view {{{-->
+	<script type="text/x-handlebars" id="donor/_view">
+		<table class="table">
+			<tbody>
+				<tr><td>Last Name</td><td>{{l_name}}</td></tr>
+				<tr><td>First Name</td><td>{{f_name}}</td></tr>
+				<tr><td>Email</td><td>{{email}}</td></tr>
+				<tr><td>Tags</td><td>{{tags}}</td></tr>
+				<tr><td>Notes</td><td>{{notes}}</td></tr>
+			</tbody>
+		</table>
+	</script><!--}}}-->
+
+	<!-- donor/_edit {{{-->
+	<script type="text/x-handlebars" id="donor/_edit">
+		<table class="table">
+			<tbody>
+				<tr>
+					<td>Last Name</td>
+					<td>{{input type="text" value=l_name}}</td>
+				</tr>
+				<tr>
+					<td>First Name</td>
+					<td>{{input type="text" value=f_name}}</td>
+				</tr>
+				<tr>
+					<td>Email</td>
+					<td>{{input type="text" value=email}}</td>
+				</tr>
+				<tr>
+					<td>Tags</td>
+					<td>{{input type="text" value=tags}}</td>
+				</tr>
+				<tr>
+					<td>Notes</td>
+					<td>{{textarea value=notes}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</script><!--}}}-->
+
+<!--*********************************************************-->
+
+	<!-- items/_control {{{-->
+	<script type="text/x-handlebars" id="items/_control">
+		<table class="table-condensed">
+			<tbody>
+			<tr>
+				<td colspan="2">
+					<button class="btn btn-xs" {{action 'pageFirst'}}>|&lsaquo;</button>
+					<button class="btn btn-xs" {{action 'pagePrev'}}>&laquo;</button>
+					<!--&hellip;-->
+					{{page}} / {{total}}
+					<!--&hellip;-->
+					<button class="btn btn-xs" {{action 'pageNext'}}>&raquo;</button>
+					<button class="btn btn-xs" {{action 'pageLast'}}>&rsaquo;|</button>
+					&nbsp;&nbsp;
+					<button class="btn btn-xs" {{action 'toggleShowOptions'}}
+						 {{bind-attr aria-pressed=showOptions}}>
+						{{#if showOptions}}&barwed;{{else}}&barvee;{{/if}}
+						Options
+					</button>
+				</td>
+			</tr>
+			{{#if showOptions}}
+			<tr>
+				<td>Name</td>
+				<td>
+					{{input type="text" size="12"
+						value=nameFilter insert-newline="applyItemFilters"}}
+					<button class="btn btn-xs" {{action 'clearNameFilter'}}>
+						&times;
+					</button>
+				</td>
+			</tr>
+			<tr>
+				<td>Category</td>
+				<td>
+					<button class="btn btn-sm" {{action 'pickDept'}}>
+						{{#if deptFilter.id}}{{deptFilter.name}}{{else}}(all){{/if}}
+					</button>
+					<button class="btn btn-xs" {{action 'clearDeptFilter'}}>
+						&times;
+					</button>
+				</td>
+			</tr>
+			<tr>
+				<td>Giver</td>
+				<td>
+					<button class="btn btn-sm" {{action 'pickGiver'}}>
+						{{#if giver}}{{giver.name}}{{else}}(none){{/if}}
+					</button>
+					<button class="btn btn-xs" {{action 'clearGiver'}}>
+						&times;
+					</button>
+				</td>
+			</tr>
+			{{/if}}
+			</tbody>
+		</table>
+	</script>
+	<!--}}}-->
+
+	<!-- items {{{-->
+	<script type="text/x-handlebars" id="items">
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="col-md-4">
+					{{partial "items/control"}}
+					<table class='table'>
+						<thead>
+							<tr>
+								<th>Donation Items</th>
+								<th>&nbsp;</th>
+								<th class="number-cell">$Needed</th>
+								<th class="number-cell">%Pledged</th>
+								<th class="col-pull-1">
+									<button class="btn btn-xs" {{action 'addItem'}}>
+										New
+									</button>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							{{#each it in model}}
+							<tr>
+								<td>
+									{{#link-to 'item' it}}{{it.name}}{{/link-to}}
+								</td>
+								<td>
+									{{#if it.image_url}}
+									<img class="item-img-small" {{bind-attr src=it.image_url}}>
+									{{/if}}
+								</td>
+								<td class="number-cell">
+									${{it.remain}}
+								</td>
+								<td class="number-cell">
+									{{it.progress}}%
+								</td>
+								<td class="col-pull-1">
+									<button class="btn btn-xs" {{action 'delItem' it}}>
+										&cross;
+									</button>
+									{{#if it.remain}}
+									{{#if giver}}
+									&nbsp;&nbsp;
+									<button class="btn btn-xs" {{action 'contribToItem' it}}>
+										Give
+									</button>
+									{{/if}}
+									{{/if}}
+								</td>
+							</tr>
+							{{/each}}
+						</tbody>
+					</table>
+				</div>
+				{{outlet}}
+			</div>
+		</div>
+	</script>
+	<!--}}}-->
+
+	<!-- items/add {{{-->
+	<script type="text/x-handlebars" id="items/add">
+		<div class="col-md-6">
+		<h3>
+			{{#if name}}
+				{{name}}
+			{{else}}
+				<span class="text-muted">Enter new move-in item &hellip;</span>
+			{{/if}}
+			<br/>
+			<small class='muted'>
+				<button class="btn btn-sm btn-primary" {{action 'add' model}}>
+					Add
+				</button>
+			</small>
+		</h3>
+		{{partial 'item/edit'}}
+		</div>
+	</script><!--}}}-->
+
+	<!-- item {{{-->
+	<script type="text/x-handlebars" id="item">
+		<div class="col-md-6">
+		<h3>
+			{{name}}
+			<br/>
+			<small class='muted'>
+				{{#if isEditing}}
+					<button class="btn btn-sm" {{action 'cancelEdit'}}>Cancel</button>
+					{{#if isDirty}}
+					<button class="btn btn-sm btn-primary" {{action 'finishEdit'}}>
+						Save
+					</button>
+					{{/if}}
+				{{else}}
+					<button class="btn btn-sm" {{action 'edit'}}>Edit</button>
+				{{/if}}
+			</small>
+		</h3>
+		<hr>
+		{{#unless isEditing}}
+		{{partial 'item/view'}}
+		{{else}}
+		{{partial 'item/edit'}}
+		{{/unless}}
+		</div>
+	</script><!--}}}-->
+
+	<!-- item/_view {{{-->
+	<script type="text/x-handlebars" id="item/_view">
+		<table class="table">
+			<tbody>
+				<tr><td>Name</td><td>{{name}}</td></tr>
+				<tr><td>Category</td><td>{{dept.name}}</td></tr>
+				<tr><td>Description</td><td>{{description}}</td></tr>
+				<tr><td>Unit Cost</td><td>{{price}}</td></tr>
+				<tr><td>Quantity</td><td>{{quantity}}</td></tr>
+				<tr><td>Pledged</td><td>{{pledged}}</td></tr>
+				<tr><td>Progress</td><td>{{progress}}</td></tr>
+				<tr><td>Image Link</td><td>{{image_url}}</td></tr>
+				<tr><td>Details Link</td><td>{{detail_url}}</td></tr>
+				<tr><td>Notes</td><td>{{notes}}</td></tr>
+			</tbody>
+		</table>
+	</script><!--}}}-->
+
+	<!-- item/_edit {{{-->
+	<script type="text/x-handlebars" id="item/_edit">
+		<table class="table">
+			<tbody>
+				<tr>
+					<td>Name</td>
+					<td>{{input type="text" value=name}}</td>
+				</tr>
+				<tr>
+					<td>Category</td>
+					<td>
+						<button class="btn btn-sm" {{action 'pickDept'}}>
+							{{#if dept}}{{dept.name}}{{else}}(none){{/if}}
+						</button>
+					</td>
+				</tr>
+				<tr>
+					<td>Description</td>
+					<td>{{input type="text" value=description}}</td>
+				</tr>
+				<tr>
+					<td>Unit Cost</td>
+					<td>{{input type="text" value=price}}</td>
+				</tr>
+				<tr>
+					<td>Quantity</td>
+					<td>{{input type="text" value=quantity}}</td>
+				</tr>
+				<tr>
+					<td>Image Link</td>
+					<td>{{input type="text" value=image_url}}</td>
+				</tr>
+				<tr>
+					<td>Details Link</td>
+					<td>{{input type="text" value=detail_url}}</td>
+				</tr>
+				<tr>
+					<td>Notes</td>
+					<td>{{textarea value=notes}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</script><!--}}}-->
+
+<!--*********************************************************-->
+
+	<!-- depts/_control {{{-->
+	<script type="text/x-handlebars" id="depts/_control">
+		<table class="table-condensed">
+			<tbody>
+			<tr>
+				<td colspan="2">
+					<button class="btn btn-xs" {{action 'pageFirst'}}>|&lsaquo;</button>
+					<button class="btn btn-xs" {{action 'pagePrev'}}>&laquo;</button>
+					<!--&hellip;-->
+					{{page}} / {{total}}
+					<!--&hellip;-->
+					<button class="btn btn-xs" {{action 'pageNext'}}>&raquo;</button>
+					<button class="btn btn-xs" {{action 'pageLast'}}>&rsaquo;|</button>
+					&nbsp;&nbsp;
+					<button class="btn btn-xs" {{action 'toggleShowOptions'}}
+						 {{bind-attr aria-pressed=showOptions}}>
+						{{#if showOptions}}&barwed;{{else}}&barvee;{{/if}}
+						Options
+					</button>
+				</td>
+			</tr>
+			{{#if showOptions}}
+			<tr>
+				<td>Name</td>
+				<td>
+					{{input type="text" size="12"
+						value=nameFilter insert-newline="applyNameFilter"}}
+					<button class="btn btn-xs" {{action 'clearNameFilter'}}>
+						&times;
+					</button>
+				</td>
+			</tr>
+			{{/if}}
+			</tbody>
+		</table>
+	</script>
+	<!--}}}-->
+
+	<!-- depts {{{-->
+	<script type="text/x-handlebars" id="depts">
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="col-md-3">
+					{{partial "depts/control"}}
+					<table class='table'>
+						<thead>
+							<tr>
+								<th>Categories</th>
+								<th class="col-pull-1">
+									<button class="btn btn-xs" {{action 'addDept'}}>
+										New
+									</button>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							{{#each dp in model}}
+							<tr>
+								<td>
+								<div class="col-md-10">
+									{{#link-to 'dept' dp}}{{dp.name}}{{/link-to}}
+								</div>
+								</td>
+								<td class="col-pull-1">
+									<button class="btn btn-xs" {{action 'delDept' dp}}>
+										&cross;
+									</button>
+								</td>
+							</tr>
+							{{/each}}
+						</tbody>
+					</table>
+				</div>
+				{{outlet}}
+			</div>
+		</div>
+	</script>
+	<!--}}}-->
+
+	<!-- depts/add {{{-->
+	<script type="text/x-handlebars" id="depts/add">
+		<div class="col-md-6">
+		<h3>
+			{{#if name}}
+				{{name}}
+			{{else}}
+				<span class="text-muted">Enter new move-in dept &hellip;</span>
+			{{/if}}
+			<br/>
+			<small class='muted'>
+				<button class="btn btn-sm btn-primary" {{action 'add' model}}>
+					Add
+				</button>
+			</small>
+		</h3>
+		{{partial 'dept/edit'}}
+		</div>
+	</script><!--}}}-->
+
+	<!-- dept {{{-->
+	<script type="text/x-handlebars" id="dept">
+		<div class="col-md-6">
+		<h3>
+			{{name}}
+			<br/>
+			<small class='muted'>
+				{{#if isEditing}}
+					<button class="btn btn-sm" {{action 'cancelEdit'}}>Cancel</button>
+					{{#if isDirty}}
+					<button class="btn btn-sm btn-primary" {{action 'finishEdit'}}>
+						Save
+					</button>
+					{{/if}}
+				{{else}}
+					<button class="btn btn-sm" {{action 'edit'}}>Edit</button>
+				{{/if}}
+			</small>
+		</h3>
+		<hr>
+		{{#unless isEditing}}
+		{{partial 'dept/view'}}
+		{{else}}
+		{{partial 'dept/edit'}}
+		{{/unless}}
+		</div>
+	</script><!--}}}-->
+
+	<!-- dept/_view {{{-->
+	<script type="text/x-handlebars" id="dept/_view">
+		<table class="table">
+			<tbody>
+				<tr><td>Name</td><td>{{name}}</td></tr>
+			</tbody>
+		</table>
+	</script><!--}}}-->
+
+	<!-- dept/_edit {{{-->
+	<script type="text/x-handlebars" id="dept/_edit">
+		<table class="table">
+			<tbody>
+				<tr>
+					<td>Name</td>
+					<td>{{input type="text" value=name}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</script><!--}}}-->
+
+<!--*********************************************************-->
+
+	<!-- pledges/_control {{{-->
+	<script type="text/x-handlebars" id="pledges/_control">
+		<table class="table-condensed">
+			<tbody>
+			<tr>
+				<td colspan="2">
+					<button class="btn btn-xs" {{action 'pageFirst'}}>|&lsaquo;</button>
+					<button class="btn btn-xs" {{action 'pagePrev'}}>&laquo;</button>
+					<!--&hellip;-->
+					{{page}} / {{total}}
+					<!--&hellip;-->
+					<button class="btn btn-xs" {{action 'pageNext'}}>&raquo;</button>
+					<button class="btn btn-xs" {{action 'pageLast'}}>&rsaquo;|</button>
+					&nbsp;&nbsp;
+					<button class="btn btn-xs" {{action 'toggleShowOptions'}}
+						 {{bind-attr aria-pressed=showOptions}}>
+						{{#if showOptions}}&barwed;{{else}}&barvee;{{/if}}
+						Options
+					</button>
+				</td>
+			</tr>
+			{{#if showOptions}}
+			<tr>
+				<td>Donor</td>
+				<td>
+					<button class="btn btn-sm" {{action 'pickDonor'}}>
+						{{#if donor}}{{donor.name}}{{else}}(all){{/if}}
+					</button>
+				</td>
+			</tr>
+			{{/if}}
+			</tbody>
+		</table>
+	</script>
+	<!--}}}-->
+
+	<!-- pledges {{{-->
+	<script type="text/x-handlebars" id="pledges">
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="col-md-3">
+					{{partial "pledges/control"}}
+					<table class='table'>
+						<thead>
+							<tr>
+								<th colspan="4">Donation Pledges</th>
+							</tr>
+							<tr>
+								<th>ID</th>
+								<th>When</th>
+								<th>Item#</th>
+								<th class="number-cell">$Pledged</th>
+								<th class="col-pull-1">
+									<button class="btn btn-xs" {{action 'addPledge'}}>
+										New
+									</button>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							{{#each pl in model}}
+							<tr>
+								<td>
+									{{#link-to 'pledge' pl}}#{{pl.id}}{{/link-to}}
+								</td>
+								<td>
+									{{pl.tstamp}}
+								</td>
+								<td>
+									{{#link-to 'item' pl.item_id}}{{pl.item_id}}{{/link-to}}
+								</td>
+								<td class="number-cell">
+									${{pl.amount}}
+								</td>
+								<td class="col-pull-1">
+									<button class="btn btn-xs" {{action 'delItem' pl}}>
+										&cross;
+									</button>
+								</td>
+							</tr>
+							{{/each}}
+						</tbody>
+					</table>
+				</div>
+				{{outlet}}
+			</div>
+		</div>
+	</script>
+	<!--}}}-->
+
+	<!-- pledges/add {{{-->
+	<script type="text/x-handlebars" id="pledges/add">
+		<div class="col-md-6">
+		<h3>
+			{{#if name}}
+				{{name}}
+			{{else}}
+				<span class="text-muted">Enter new pledge &hellip;</span>
+			{{/if}}
+			<br/>
+			<small class='muted'>
+				<button class="btn btn-sm btn-primary" {{action 'add' model}}>
+					Add
+				</button>
+			</small>
+		</h3>
+		{{partial 'pledge/edit'}}
+		</div>
+	</script><!--}}}-->
+
+	<!-- pledge {{{-->
+	<script type="text/x-handlebars" id="pledge">
+		<div class="col-md-6">
+		<h3>
+			{{name}}
+			<br/>
+			<small class='muted'>
+				{{#if isEditing}}
+					<button class="btn btn-sm" {{action 'cancelEdit'}}>Cancel</button>
+					{{#if isDirty}}
+					<button class="btn btn-sm btn-primary" {{action 'finishEdit'}}>
+						Save
+					</button>
+					{{/if}}
+				{{else}}
+					<button class="btn btn-sm" {{action 'edit'}}>Edit</button>
+				{{/if}}
+			</small>
+		</h3>
+		<hr>
+		{{#unless isEditing}}
+		{{partial 'pledge/view'}}
+		{{else}}
+		{{partial 'pledge/edit'}}
+		{{/unless}}
+		</div>
+	</script><!--}}}-->
+
+	<!-- pledge/_view {{{-->
+	<script type="text/x-handlebars" id="pledge/_view">
+		<table class="table">
+			<tbody>
+				<tr><td>When</td><td>{{tstamp}}</td></tr>
+				<tr><td>Where</td><td>{{lstamp}}</td></tr>
+				<tr><td>Donor</td><td>{{donor.name}}</td></tr>
+				<tr><td>Item</td><td>{{item.name}}</td></tr>
+				<tr><td>Amount</td><td>${{amount}}</td></tr>
+				<tr><td>Fulfillment</td><td>{{fulfilled}}</td></tr>
+				<tr><td>Notes</td><td>{{notes}}</td></tr>
+			</tbody>
+		</table>
+	</script><!--}}}-->
+
+	<!-- pledge/_edit {{{-->
+	<script type="text/x-handlebars" id="pledge/_edit">
+		<table class="table">
+			<tbody>
+				<tr>
+					<td>When</td>
+					<td>{{tstamp}}</td>
+				</tr>
+				<tr>
+					<td>Where</td>
+					<td>{{lstamp}}</td>
+				</tr>
+				<tr>
+					<td>Donor</td>
+					<td>
+						<button class="btn btn-sm" {{action 'pickDonor'}}>
+							{{#if donor}}{{donor.name}}{{else}}(none){{/if}}
+						</button>
+					</td>
+				</tr>
+				<tr>
+					<td>Item</td>
+					<td>
+						<button class="btn btn-sm" {{action 'pickItem'}}>
+							{{#if item}}{{item.name}}{{else}}(none){{/if}}
+						</button>
+					</td>
+				</tr>
+				<tr>
+					<td>Amount</td>
+					<td>{{input type="text" value=amount}}</td>
+				</tr>
+				<tr>
+					<td>Fulfillment</td>
+					<td>{{input type="text" value=fulfilled}}</td>
+				</tr>
+				<tr>
+					<td>Notes</td>
+					<td>{{textarea value=notes}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</script><!--}}}-->
+
+<!--*********************************************************-->
+</body>
+</html>
+
+<!-- vim: set ts=2 noexpandtab fileformat=unix fdm=marker syntax=html: -->

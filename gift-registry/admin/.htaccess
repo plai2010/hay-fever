@@ -1,0 +1,7 @@
+# CCHS Gift Registry
+# Copyright (c) 2016 Patrick Lai
+
+SSLRequireSSL
+DirectoryIndex index.html
+
+# vim: set ts=4 noexpandtab fileformat=unix fdm=marker syntax=apache:
