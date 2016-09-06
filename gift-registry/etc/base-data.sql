@@ -32,7 +32,7 @@ INSERT INTO CCHS_DEPT(ID, NAME) VALUES
 	(18, 'History'),
 	(19, 'Literature'),
 	(20, 'Foreign Language'),
-	(21, 'Sports'),
+	(21, 'Sports/Fitness Room'),
 	(22, 'Bible'),
 	(23, 'Library'),
 

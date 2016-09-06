@@ -79,7 +79,7 @@ INSERT INTO CCHS_ITEM(
 	108, 23,
 	1, 17,
 	'1491: New Revelations of the Americas Before Columbus by Charles C. Mann',
-	'ann describes the life of America before the arrival of Christopher Columbus.',
+	'Mann describes the life of America before the arrival of Christopher Columbus.',
 	'https://images-na.ssl-images-amazon.com/images/I/51H78uwFowL._SX323_BO1,204,203,200_.jpg',
 	'https://www.amazon.com/1491-Revelations-Americas-Before-Columbus/dp/1400032059/ref=sr_1_1?ie=UTF8&qid=1470763883&sr=8-1&keywords=1491',
 	NULL
@@ -103,7 +103,7 @@ INSERT INTO CCHS_ITEM(
 	111, 23,
 	1, 30,
 	'Tesla: Inventor of the Electrical Age by W. Bernard Carlson',
-	'etailed account of the inventor Tesla, a large contributor for the electrical revolution',
+	'Detailed account of the inventor Tesla, a large contributor for the electrical revolution',
 	'https://images-na.ssl-images-amazon.com/images/I/51LB4VCxphL._SX329_BO1,204,203,200_.jpg',
 	'https://www.amazon.com/Tesla-Inventor-Electrical-Bernard-Carlson/dp/0691057761/ref=mt_hardcover?_encoding=UTF8&me=',
 	NULL
@@ -516,6 +516,238 @@ INSERT INTO CCHS_ITEM(
 	'Chauvet COLORRado 1 Solo',
 	'https://www.chauvetprofessional.com/wp-content/uploads/2015/09/prod_colorado_1_solo_right.jpg',
 	'https://www.chauvetprofessional.com/products/colorado-1-solo/',
+	NULL
+), (
+	200, 21,
+	2, 799,
+	'Airbike',
+	'Assault Airbike-Black;Cardio training for fitness room',
+	'http://www.roguefitness.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/4/_/4__87790.1387843079.1280.1280.jpg',
+	'http://www.assaultfitnessproducts.com/products/assault-airbike.html',
+	NULL
+), (
+	201, 21,
+	2, 2995,
+	'S-DRIVE Treadmill',
+	'Matrix - S-Drive Performance Trainer; Cardio training for fitness room',
+	'http://productload.johnsonfit.com/inc/uploaded_media/86d3b4770549c11fd535328d2be54f64/image/0d50a8cc7046a16141ba4db901f82c9b.png',
+	'http://www.matrixfitness.com/en/cardio/s-drive/s-drive',
+	NULL
+), (
+	202, 21,
+	1, 5995,
+	'4 Station Strength Training',
+	'Hoist- CMJ-6000-1;(Single Lat Station, Single Low Row, Tricep, HiLo)',
+	'http://www.hoistfitness.com/content/images/equipment/360view/CMJ-6000-1/000014.jpg',
+	'http://www.hoistfitness.com/commercial/equipment/cmj-6000-1_4-station-single-pod',
+	NULL
+), (
+	203, 21,
+	1, 3195,
+	'Leg Curls',
+	'Hoist-RS-1408, ROC-IT Selectorized Prone Leg Curls; Strength training for fitness room ',
+	'http://www.hoistfitness.com/content/images/equipment/360view/RS-1408/000042.jpg',
+	'http://www.hoistfitness.com/commercial/equipment/rs-1408_prone-leg-curl',
+	NULL
+), (
+	204, 21,
+	1, 4795,
+	'Leg Press',
+	'Hoist-RS-1403A, ROC-IT Selectorized Leg Press; Strength training for fitness room',
+	'http://www.hoistfitness.com/content/images/equipment/360view/RS-1403/000045.jpg',
+	'http://www.hoistfitness.com/commercial/equipment/rs-1403_leg-press',
+	NULL
+), (
+	205, 21,
+	1, 3195,
+	'Chest Press',
+	'Hoist - RS-1301A,ROC-IT Selectorized Chest Press; Strength training for fitness room',
+	'http://www.hoistfitness.com/content/images/equipment/360view/RS-1301/000004.jpg',
+	'http://www.hoistfitness.com/commercial/equipment/rs-1301_chest-press',
+	NULL
+), (
+	206, 21,
+	1, 5195,
+	'Functional Trainer',
+	'Matrix-G3MSFT3; Strength training for fitness room',
+	'http://productload.johnsonfit.com/inc/uploaded_media/419057ba2a0b1c129885737eab5db27e/image/4c498ee138b85a49d7c4f8ac28a0a364.png',
+	'http://www.matrixfitness.com/en/strength/multi-station/g3-msft3-functional-trainer',
+	NULL
+), (
+	207, 21,
+	2, 499,
+	'TRIPLEPLYO',
+	'Torque - XTP-20-24-30; Tripleplyo 20-24-30',
+	'https://www.torquefitness.com/wp-content/uploads/XTP-20-24-30-web-550x550.jpg',
+	'https://www.torquefitness.com/solutions/tripleplyo-20-24-30/',
+	NULL
+), (
+	208, 21,
+	3, 200,
+	'Suspension Trainer',
+	'TRX - TRXCLUB3; Commercial Suspension  Trainer (rubber handles, locking  carabiner)',
+	'http://www.bestgymequipment.co.uk/media/catalog/product/cache/1/image/700x700/9df78eab33525d08d6e5fb8d27136e95/s/c/screen_shot_2011-10-08_at_12.16.55_1.jpg',
+	'https://www.torquefitness.com/solutions/trx-commercial-suspension-trainer/',
+	NULL
+), (
+	209, 21,
+	1, 5995,
+	'X-LAB EDGE Training Station',
+	'Torque - XLE-X1-03; X-Lab Edge - X1 Package - Illusion Orange',
+	'https://www.torquefitness.com/wp-content/uploads/XLE-X1-web1-550x550.jpg',
+	'https://www.torquefitness.com/solutions/x-lab-edge-x1-package/',
+	NULL
+), (
+	212, 21,
+	1, 1995,
+	'X-LAB Accessory Package',
+	'Torque - XLAP1; X-Lab Accessory Package 1',
+	'https://www.torquefitness.com/wp-content/uploads/XLAP1-web3-550x550.jpg',
+	'https://www.torquefitness.com/solutions/x-lab-accessory-package/',
+	NULL
+), (
+	213, 21,
+	1, 335,
+	'Olympic Plate Tree',
+	'Torque - MOPT; Plate Tree',
+	'https://www.torquefitness.com/wp-content/uploads/MOPT-web-550x550.jpg',
+	'https://www.torquefitness.com/solutions/olympic-plate-tree/',
+	NULL
+), (
+	214, 21,
+	1, 1595,
+	'Portable Training System',
+	'Prism Fit - 400-130-290; Smart Cart Training System',
+	'http://st.hzcdn.com/simgs/0611297905ca536a_4-8882/contemporary-home-gym-equipment.jpg',
+	'http://www.houzz.com/photos/24683353/Prism-Fitness-Smart-Cart-Training-Systems-400-130-290-contemporary-home-gym-equipment',
+	NULL
+), (
+	215, 21,
+	2, 25,
+	'Workout Mat',
+	'Aeromat - 20-inch Width Workout  Mat Hanging Rack - Black',
+	'http://thumbs.ebaystatic.com/images/g/Kz0AAOSwr7ZW4IES/s-l225.jpg',
+	'https://www.amazon.com/Aeromat-74611-Mount-Hanging-Width/dp/B001HHEUOW',
+	NULL
+), (
+	216, 21,
+	12, 26,
+	'Workout Fitness Mats',
+	'EcoWise - 3/8 EcoWise Essential  Workout Fitness Mat 20 x 48 w/  Eyelets - Onyx',
+	'http://www.aeromats.com/uploads/5/1/2/5/51252433/s729994238649277370_p233_i13_w1280.jpeg',
+	'http://www.overstock.com/Sports-Toys/Aeromat-Workout-Mat-with-Eyelets-48-inch-long/10272712/product.html?refccid=QQ2D62I7B3632Q2DJOZE4ROEPU&searchidx=7',
+	NULL
+), (
+	217, 21,
+	4, 63,
+	'25 LB Green Bumper Plates',
+	'Torque - 25 LB Rubber Colored  Bumper Plate - Green',
+	'https://www.torquefitness.com/wp-content/uploads/BPTCR-25-550x550.jpg',
+	'https://www.torquefitness.com/solutions/rubber-colored-bumper-plates/',
+	NULL
+), (
+	220, 21,
+	2, 105,
+	'45 LB Yellow Bumper Plates',
+	'Torque - 45 LB Rubber Colored  Bumper Plate - Yellow',
+	'https://www.torquefitness.com/wp-content/uploads/BPTCR-35-550x550.jpg',
+	'https://www.torquefitness.com/solutions/rubber-colored-bumper-plates/',
+	NULL
+), (
+	221, 21,
+	1, 749,
+	'Ab Bench',
+	'Hoist -CF-3264; Adjustable Decline Bench',
+	'http://www.hoistfitness.com/content/images/equipment/CF-3264-PLATINUM-DOVEGREY.JPG?width=348',
+	'http://www.hoistfitness.com/commercial/equipment/cf-3264_ab-bench',
+	NULL
+), (
+	223, 21,
+	1, 1650,
+	'Dumbbell Set (5-50LB) ',
+	'Hampton - 5-50 lbs DURA-PRO  Urethane Pro-Style Dumbbell Set, (5  lbs increments, 10 pairs)',
+	'http://i.ebayimg.com/00/s/NDE3WDQ3OQ==/z/Rx4AAOSw0UdXtinN/$_35.JPG?set_id=8800005007',
+	'http://www.fitnessedgeonline.com/Hampton-Dura-Pro-5-50lb-Urethane-Pro-Style-DB-Set-p/dpu-5-50.htm',
+	NULL
+), (
+	224, 21,
+	1, 929,
+	'Dumbbell Rack (2-Tier)',
+	'Hoist - 2-Tier Horizontal Dumbbell  Rack (10 pairs)',
+	'http://www.hoistfitness.com/content/images/equipment/CF-3461-2_PLATINUM.JPG?width=348',
+	'http://www.hoistfitness.com/commercial/equipment/cf-3461-2_2-tier-dumbbell-rack',
+	NULL
+), (
+	227, 21,
+	2, 649,
+	'Incline Bench',
+	'Hoist - Flat / Incline Bench',
+	'http://www.hoistfitness.com/content/images/equipment/CF-3160-PLATINUM-DOVEGREY.JPG?width=348',
+	'http://www.hoistfitness.com/commercial/equipment/cf-3160_super-flat-incline-bench',
+	NULL
+), (
+	228, 10,
+	10, 28,
+	'DVD Players ',
+	'DVD players for each classroom',
+	'https://smedia.webcollage.net/rwvfp/wc/live/21581248/module/samsungus//www.samsung.com/us/system/consumer/product/dv/de/36/dvde360za/dvd-e360_l30_m_1.jpg.w960.jpg',
+	'https://www.neweggbusiness.com/product/product.aspx?item=9b-117-000c-00011',
+	NULL
+), (
+	229, 10,
+	3, 850,
+	'VIZIO LED-LCD TV ',
+	'65\" or larger TV monitors/screens for classrooms',
+	'http://s7d1.scene7.com/is/image/officedepot/593693_vw_etz00_1032849572?$OD-Med$',
+	'http://www.officedepot.com/a/products/593693/VIZIO-D-D65-D2-65-1080p/?cm_mmc=PLA-_-Google-_-TVs_Home_Theater-_-593693-VQ6-51194819876-VQ16-c-VQ17-pla_with_promotion-VQ18-online-VQ19-593693-VQ20-101648567636-VQ21--VQ22-624117322-VQ27-10575894956&gclid',
+	NULL
+), (
+	230, 10,
+	1, 650,
+	'Samsung 55\" Class (54.6\" Diag.) 1080p Smart LED LCD TV ',
+	'TV for staff lounge',
+	'http://images.costco-static.com/image/media/350-995566-847__2.jpg',
+	'http://www.costco.com/.product.100212117.html',
+	NULL
+), (
+	232, 10,
+	1, 100,
+	'Video Editing Software',
+	'CyberLink PowerDirector 14 Ultimate Suite Student & Teacher Edition',
+	'http://www.cyberlink.com/stat/events/enu/2013/Q3/Student-Program/images/box_pdr_ultimatesuite.png',
+	'http://www.cyberlink.com/stat/events/enu/2013/Q3/Student-Program/index.jsp',
+	NULL
+), (
+	233, 10,
+	5, 30,
+	'Camera Memory Card with WiFi Capabilities',
+	'Eyefi Mobi 8GB SDHC Class 10 Wi-Fi Memory Card with 90-day Eyefi Cloud Service',
+	'https://images-na.ssl-images-amazon.com/images/I/51XV6Cgj74L._SY450_.jpg',
+	'https://www.amazon.com/Memory-Service-Frustration-Packaging-MOBI-8-FF/dp/B00CS4WPD6?ie=UTF8&camp=1789&creative=390957&creativeASIN=B00CS4WPD6&linkCode=as2&linkId=MQ7PRHCQDJ7D57TS&redirect=true&ref_=as_li_tl&tag=eberopolis-20',
+	NULL
+), (
+	234, 10,
+	10, 36,
+	'Wireless Presenter with Laser Pointer',
+	'Logitech Wireless Presenter R400, Presentation Wireless Presenter with Laser Pointer',
+	'https://images-na.ssl-images-amazon.com/images/I/41m21qlrvuL._SX300_.jpg',
+	'https://www.amazon.com/gp/product/B002GHBUTK?ref_=sr_1_2&qid=1470113983&sr=8-2&keywords=wireless%20presenter%20with%20laser%20pointer&pldnSite=1',
+	NULL
+), (
+	235, 10,
+	16, 60,
+	'Color Paper Rolls',
+	'36x100 Dual surface color paper rolls.',
+	'http://di5cp8ixdolg4.cloudfront.net/images/products/16894b.jpg',
+	'http://www6.discountschoolsupply.com/Product/ProductDetail.aspx?product=16894&Category=785',
+	NULL
+), (
+	236, 10,
+	2, 539,
+	'Large Paper Roll Rack ',
+	'Bulman R995 36\" Vertical 8 Roll Paper Rack',
+	'http://www.webstaurantstore.com/images/products/main/74549/78336/bulman-r995-36-vertical-8-roll-paper-rack.jpg',
+	'http://www.webstaurantstore.com/bulman-r995-36-vertical-8-roll-paper-rack/188R995.html?utm_source=Google&utm_medium=cpc&utm_campaign=GoogleShopping&gclid=CPimlvbWoc4CFdKGfgodmvIA-A',
 	NULL
 );
 COMMIT;
