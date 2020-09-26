@@ -567,8 +567,25 @@ var CchsApp = (function(Ember, DS, app, cfg) {
 				this.controller.transitionToRoute('items.add');
 			},
 			delItem: function(item) {
-				// TODO
-				alert('TODO: delete item');
+				if (!item || !confirm('Delete "' + item.get('name') + '"?'))
+					return;
+
+				var route = this;
+
+				$.ajax({
+					url: '/'+STATE.api_ns+'/items/'+item.id,
+					type: 'DELETE'
+				}).done(function(data) {
+					data = data || {};
+
+					if (data.okay) {
+						alert('Item deleted.');
+						route.store.find('item', item.id).then(function(item) {
+							item.unloadRecord();
+							route.send('refreshPage');
+						});
+					}
+				});
 			},
 			contribToItem: function(item) {
 				if (!item)
