@@ -20,7 +20,7 @@ return call_user_func_array(function($libdir) {
 		$pdoName = 'mysql:'
 			. "host={$settings['dbhost']}"
 			. ';'
-			. "dbname={$settings['dbuser']}"
+			. "dbname={$settings['dbname']}"
 			;
 		$pdoUser = $settings['dbuser'];
 		$pdoPass = $settings['dbpass'];
